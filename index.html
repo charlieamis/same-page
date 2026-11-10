@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Same Page: a newlywed-style game with a base model</title>
+  <meta name="description" content="A cooperative game where you and a base language model try to predict each other's answers." />
+  <!-- Only the ACS API may be contacted from this page. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; connect-src https://api.v2.infra.acsresearch.org; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'" />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 56 C10 40 4 28 12 18 C20 9 30 13 32 20 C34 13 44 9 52 18 C60 28 54 40 32 56Z' fill='%23ff5d8f' stroke='%23ffd166' stroke-width='4'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="marquee">
+    <h1><span class="w1">Same</span> <span class="w2">Page</span></h1>
+    <p class="tagline">You and a base model. Can you predict each other?</p>
+  </header>
+
+  <main>
+    <!-- 1. Setup -->
+    <section id="setup" class="panel">
+      <h2>1 · Connect your ACS API key</h2>
+      <form id="key-form" autocomplete="off">
+        <label for="key-input" class="sr-only">ACS API key</label>
+        <input id="key-input" type="password" placeholder="sk-acs-…" spellcheck="false" autocomplete="off" />
+        <button type="submit" class="btn hot">Use key</button>
+        <label class="check"><input id="key-remember" type="checkbox" /> Remember for this tab</label>
+      </form>
+      <p id="key-status" class="muted" role="status"></p>
+      <p class="note">
+        🔒 Your key stays in this browser tab and is only sent to <code>api.v2.infra.acsresearch.org</code>.
+        Tip: make a <strong>separate key with a low daily budget</strong> just for this game.
+      </p>
+      <div class="row">
+        <label for="model-select">Your partner</label>
+        <select id="model-select" disabled><option value="llama-8b">llama-8b</option></select>
+        <span id="model-status" class="muted"></span>
+      </div>
+      <button id="start-btn" class="btn hot big" disabled>Start the game</button>
+    </section>
+
+    <!-- Rules -->
+    <details class="panel how" open id="rules">
+      <summary>How to play</summary>
+      <p>You and a base model are a team. Like the classic TV newlywed game, you score points every time one of you correctly predicts what the other said.</p>
+      <ol>
+        <li><strong>Round 1 · You predict the model.</strong> The model answers a question “offstage” and its answer is sealed. You guess what it wrote. 3 questions, <strong>5 points</strong> each.</li>
+        <li><strong>Round 2 · The model predicts you.</strong> The model seals its guess first, then you give your own answer. 3 questions, <strong>10 points</strong> each.</li>
+        <li><strong>Bonus question · 25 points.</strong> One last, bigger question. The model predicts you.</li>
+      </ol>
+      <p>Answers are a few words. Small differences don't matter (“a dog” = “Dogs”). If the host's matcher is too strict, you can make the <em>host's call</em> and count it, just as the show's host would. A perfect game is <strong>70 points</strong>.</p>
+    </details>
+
+    <!-- 2. The game -->
+    <section id="stage" hidden>
+      <div class="scorebar">
+        <div class="scorebox"><span class="label">Team score</span><span id="score">0</span><span class="of">of 70</span></div>
+        <ol id="pips" class="pips" aria-label="Questions"></ol>
+      </div>
+
+      <div id="round-banner" class="round-banner"></div>
+      <div id="play" class="play" aria-live="polite"></div>
+
+      <div class="actions">
+        <button id="api-btn" class="btn ghost">Show me this in the API</button>
+        <button id="prompt-btn" class="btn ghost">See the page the model reads</button>
+        <button id="sound-btn" class="btn ghost" aria-pressed="true">🔊 Sound on</button>
+      </div>
+      <section id="api-view" class="panel" hidden></section>
+      <section id="prompt-view" class="panel" hidden></section>
+    </section>
+
+    <details class="panel how">
+      <summary>What this does (and does <em>not</em>) mean</summary>
+      <ul>
+        <li><strong>The model isn't a person and has no favorite season.</strong> A base model continues text. The game shows it a log of a prediction game between “Player A” (you) and “Player B”, and the model writes the next line.</li>
+        <li><strong>Round 1:</strong> the model's “answer” is what it writes on Player B's line. We sample it 10 times at temperature 1 and use the first usable sample; the others show what it <em>might</em> have said.</li>
+        <li><strong>Round 2:</strong> the model's “guess” is what it writes on <em>your</em> line, using everything you've written earlier in the log. It's a prediction of you, and it can only use what's on the page.</li>
+        <li><strong>The percentages</strong> are the model's own probability for your exact words (from logprobs), ending with a line break so “pizza” doesn't get credit for “pizza with olives”.</li>
+        <li>One sample is luck as well as skill. A low-probability answer can still come up, which is part of the fun, and part of what base models are like.</li>
+      </ul>
+    </details>
+  </main>
+
+  <footer>
+    Built on the <a href="https://docs.v2.infra.acsresearch.org/docs" rel="noopener noreferrer">ACS Infra base-model API</a> ·
+    <a href="https://github.com/charlieamis/same-page" rel="noopener noreferrer">source</a> ·
+    An homage to classic TV newlywed game shows; not affiliated with any of them.
+  </footer>
+
+  <script type="module" src="js/game.js"></script>
+</body>
+</html>
