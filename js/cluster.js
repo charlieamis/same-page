@@ -96,6 +96,8 @@ const WORD_SYNONYMS = {
   cop: "police", policeman: "police", policewoman: "police", bicycle: "bike", fireman: "firefighter",
   firemen: "firefighter", television: "tv", telly: "tv", automobile: "car", cellphone: "phone",
   smartphone: "phone", mom: "mother", mum: "mother", dad: "father", cinema: "movie", film: "movie",
+  // Added for Same Page, from real llama-8b answers:
+  autumn: "fall", macaroni: "mac", flight: "fly", sofa: "couch", kitty: "cat",
 };
 const PHRASE_SYNONYMS = {
   "police officer": "police", "cell phone": "phone", "mobile phone": "phone", "fire fighter": "firefighter",

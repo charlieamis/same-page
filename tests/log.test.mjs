@@ -51,3 +51,11 @@ test("pickGame gives 3 + 3 different questions and a bonus", () => {
   all.forEach((q) => assert.ok(QUESTIONS.includes(q)));
   assert.ok(BONUS_QUESTIONS.includes(g.bonus));
 });
+
+test("everyday synonyms seen in real games match", () => {
+  assert.ok(answersMatch("Fall", "Autumn"));
+  assert.ok(answersMatch("Mac and cheese", "Macaroni and cheese"));
+  assert.ok(answersMatch("Flying", "Flight"));
+  assert.ok(answersMatch("The rain", "Rain"));
+  assert.ok(!answersMatch("Rain", "Crickets"));
+});

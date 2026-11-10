@@ -22,7 +22,9 @@ predicted their answers, then they compared cards. We keep that structure and po
 | **Round 2** | The model predicts you. It seals its guess, then you give your real answer. | 3 | 10 each |
 | **Bonus** | The model predicts you. | 1 | 25 |
 
-A perfect game is **70 points**. Questions are drawn at random from a built-in list each game.
+A perfect game is **70 points**. Questions are drawn at random from a built-in list each game. Every built-in
+question was test-run on llama-8b; ones where nearly every sample said something different (pet names, "your
+favorite word", autobiography titles) were dropped, since a match was close to impossible.
 
 **Changes from the show, and why:**
 
